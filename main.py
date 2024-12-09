@@ -6,3 +6,4 @@ load_dotenv()
 testing = os.environ.get('TEST')
 
 print(testing)
+print(testing)
