@@ -20,22 +20,39 @@ def main():
 
         if auth_mode == "Login":
             st.title("Log In")
-            email = st.text_input("Enter your email")
-            password = st.text_input("Enter your password")
+            with st.form(key="login_form"):
+                email = st.text_input("Enter your email")
+                password = st.text_input("Enter your password")
 
-            # if login(supabase, email, password):
-            #    st.switch_page("home.py")
+                submit = st.form_submit_button("Login")
+
+                if submit:
+                    if email and password:
+                        print(email, password)
+                        st.success("Thank you!")
+                        # login(supabase, email, password)
+                    else:
+                        st.error("Please enter your email and password")
 
         else:
-            st.title("Log In")
-            email = st.text_input("Enter your email")
-            password1 = st.text_input("Enter your password")
-            password2 = st.text_input("Confirm your password")
+            st.title("Sign Up")
+            with st.form(key="sign_up_form"):
+                email = st.text_input("Enter your email")
+                password = st.text_input("Enter your password")
+                confirm_password = st.text_input("Confirm your password")
 
-            # if password1 == password2:
-            #    signup(supabase, email, password1)
-            # else:
-            #    st.error("Passwords don't match")
+                submit = st.form_submit_button("Sign Up")
+
+                if submit:
+                    if email and password and confirm_password:
+                        print(email, password, confirm_password)
+                        if password == confirm_password:
+                            st.success("Thank you!")
+                            # signup(supabase, email, password1)
+                        else:
+                            st.error("Passwords do not match")
+                    else:
+                        st.error("Please enter your email and password")
 
 
 def login(supabase: Client, email: str, password: str):
