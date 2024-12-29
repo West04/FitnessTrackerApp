@@ -20,12 +20,24 @@ def main():
     if "response" not in st.session_state or st.session_state["response"] is None:
         login_page()
     else:
-        home_page()
+        init_nav()
 
 
-def home_page():
-    st.title("Home Page")
-    st.sidebar.button("Logout", on_click=logout)
+def init_nav():
+    home_page = st.Page("1_Home.py", title="Home Page", icon="🏠", default=True)
+    workout_page = st.Page("2_Workouts.py", title="Workout", icon="💪🏻")
+    tracking_page = st.Page("3_Progress.py", title="Tracking", icon="📈")
+    edit_search_page = st.Page("4_Edit_Workout.py", title="Search/Edit", icon="📝")
+
+    pg = st.navigation(
+        {
+            "Home": [home_page],
+            "Workout": [workout_page, tracking_page],
+            "Edit": [edit_search_page]
+        }
+    )
+
+    pg.run()
 
 
 def login_page():
