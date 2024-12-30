@@ -135,3 +135,18 @@ with tab2:
 with tab3:
     st.title("Drafts")
 
+    # Load Drafts from the database
+    # Put them in a list in session state
+    exercises = st.session_state.new_workout  # Tester while the database is not connected
+    workouts = [exercises]
+
+    for index, workout in enumerate(workouts):
+        st.markdown(f"## Workout {index + 1}")
+        for exercise_index, exercise in enumerate(workout):
+            st.markdown(f"### {exercise.name} for {exercise.number_of_sets} sets")
+
+            for set_index, exercise_sets in enumerate(exercise.sets):
+                st.markdown(f"#### Set {set_index + 1}")
+                st.markdown(f"##### {exercise_sets.weight} for {exercise_sets.reps} sets")
+
+
