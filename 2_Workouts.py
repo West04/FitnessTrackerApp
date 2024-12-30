@@ -47,12 +47,12 @@ def render_workout_form():
 
         for set_num in range(sets):
             st.markdown(f"#### Set {set_num + 1}")
-            col1, col2 = st.columns(2)
+            weight_col, reps_col = st.columns(2)
 
-            with col1:
+            with weight_col:
                 weight = st.number_input(f"Weight for Set {set_num + 1} (lbs)", min_value=0, step=5, key=f'weight_set_{i}_{set_num}')
 
-            with col2:
+            with reps_col:
                 rep = st.number_input(f"Reps per Set {set_num + 1}", min_value=1, step=1, key=f'rep_set_{i}_{set_num}')
 
             new_workout[i].change_set_weight(set_num, weight)
@@ -60,6 +60,42 @@ def render_workout_form():
 
         st.markdown("---")
     st.session_state.new_workout = new_workout
+
+
+def add_exercise_form():
+    with st.form(key='add_exercise'):
+
+        new_exercise = st.text_input("Enter the Exercise Here")
+        new_exercise = new_exercise.lower().title()
+
+        submit = st.form_submit_button("Add Exercise")
+
+        if submit:
+            query_response = (
+                st.session_state.supabase
+                .table("Exercises")
+                .select("*")
+                .eq("exercise", new_exercise).execute()
+            )
+
+            if query_response.error:
+                st.error(f"An Error occurred: {query_response.error}")
+            elif query_response.data:
+                st.success("The Exercise is Already in the System")
+            else:
+                st.success("The Exercise is being Added Now")
+
+                insert_response = (
+                    st.session_state.supabase
+                    .table("Exercises")  # Assuming the correct table is "Exercises"
+                    .insert({"exercise": new_exercise})
+                    .execute()
+                )
+
+                if insert_response.error:
+                    st.error(f"An Error occurred: {insert_response.error}")
+                else:
+                    st.success("The Exercise has been Added")
 
 
 st.title("Workout Tracker", )
@@ -86,8 +122,14 @@ with tab1:
         if st.button("Save As Draft", key='save_draft'):
             save_draft()
 
+    if st.button("Testing", key='testing'):
+        for exercise in st.session_state.new_workout:
+            print(exercise)
+
 with tab2:
     st.write("Do you have an exercise that you do not see in the workout creation tab? You can add it here.")
+
+    add_exercise_form()
 
 
 with tab3:
