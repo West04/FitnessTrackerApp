@@ -48,7 +48,7 @@ class Exercise:
             f"Set {i + 1}: {specific}"
             for i, specific in enumerate(self.sets)
         )
-        return f"Exercise: {self.name}\nSets: {self.number_of_sets}\n\t{sets_str}"
+        return f"Exercise: {self.name} for {self.number_of_sets} setsf\n\t{sets_str}"
 
     def __repr__(self) -> str:
         return f"Exercise(name='{self.name}', sets={self.sets})"
